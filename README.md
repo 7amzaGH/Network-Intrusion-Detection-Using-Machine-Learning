@@ -1,5 +1,11 @@
 # Network Intrusion Detection System
 
+![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-ML%20Library-orange)
+![Optuna](https://img.shields.io/badge/Optuna-Hyperparameter%20Tuning-yellow)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+
 A machine learning-based approach to detecting network intrusions and anomalies using various classification algorithms.
 
 ## 📋 Table of Contents
@@ -18,6 +24,38 @@ A machine learning-based approach to detecting network intrusions and anomalies 
 ## 🎯 Overview
 
 This project implements a network intrusion detection system using machine learning algorithms to classify network traffic as either normal or anomalous. The system analyzes 41 different features of network connections to identify potential security threats.
+
+## 📁 Project Structure
+
+```
+network-intrusion-detection/
+│
+├── data/
+│   ├── Train_data.csv
+│   └── Test_data.csv
+│
+├── notebooks/
+│   └── CS.ipynb
+│
+├── src/
+│   ├── __init__.py
+│   ├── preprocessing.py
+│   ├── feature_selection.py
+│   ├── models.py
+│   └── evaluation.py
+│
+├── models/
+│   └── saved_models/
+│
+├── results/
+│   ├── figures/
+│   └── reports/
+│
+├── requirements.txt
+├── README.md
+├── LICENSE
+└── .gitignore
+```
 
 ## ✨ Features
 
@@ -64,6 +102,21 @@ The dataset contains network traffic data with 42 features:
 - **Test Accuracy**: 99.43%
 - **F1-Score**: 99.41%
 
+## 🔬 Feature Selection
+
+The project uses Recursive Feature Elimination (RFE) with Random Forest to select the top 10 most important features:
+
+1. protocol_type
+2. service
+3. flag
+4. src_bytes
+5. dst_bytes
+6. count
+7. same_srv_rate
+8. dst_host_srv_count
+9. dst_host_same_srv_rate
+10. dst_host_same_src_port_rate
+11. 
 ## 📈 Results
 
 | Model | Precision | Recall | F1-Score | Training Time | Testing Time |
@@ -77,6 +130,37 @@ The Decision Tree classifier achieved the highest performance with:
 - 99.43% test accuracy
 - Only 44 misclassifications out of 7,558 samples
 - Excellent balance between precision (99.51%) and recall (99.57%)
+
+## 📊 Visualization
+
+The project includes comprehensive visualizations:
+- Class distribution plots
+- Model performance comparison charts
+- Confusion matrices
+- Precision-Recall curves
+- F1-Score comparison bar charts
+
+## 🎓 Model Optimization
+
+### Hyperparameter Tuning with Optuna
+
+```python
+import optuna
+
+def objective(trial):
+    dt_max_depth = trial.suggest_int('dt_max_depth', 2, 32)
+    dt_max_features = trial.suggest_int('dt_max_features', 2, 10)
+    
+    classifier = DecisionTreeClassifier(
+        max_features=dt_max_features,
+        max_depth=dt_max_depth
+    )
+    classifier.fit(x_train, y_train)
+    return classifier.score(x_test, y_test)
+
+study = optuna.create_study(direction='maximize')
+study.optimize(objective, n_trials=30)
+```
 
 ## 🚀 Installation
 
@@ -128,38 +212,6 @@ score = dt.score(X_test, y_test)
 print(f"Test Accuracy: {score}")
 ```
 
-## 📁 Project Structure
-
-```
-network-intrusion-detection/
-│
-├── data/
-│   ├── Train_data.csv
-│   └── Test_data.csv
-│
-├── notebooks/
-│   └── CS.ipynb
-│
-├── src/
-│   ├── __init__.py
-│   ├── preprocessing.py
-│   ├── feature_selection.py
-│   ├── models.py
-│   └── evaluation.py
-│
-├── models/
-│   └── saved_models/
-│
-├── results/
-│   ├── figures/
-│   └── reports/
-│
-├── requirements.txt
-├── README.md
-├── LICENSE
-└── .gitignore
-```
-
 ## 📦 Requirements
 
 ```
@@ -173,52 +225,6 @@ xgboost>=1.7.5
 optuna>=3.0.3
 tabulate>=0.9.0
 ```
-
-## 🔬 Feature Selection
-
-The project uses Recursive Feature Elimination (RFE) with Random Forest to select the top 10 most important features:
-
-1. protocol_type
-2. service
-3. flag
-4. src_bytes
-5. dst_bytes
-6. count
-7. same_srv_rate
-8. dst_host_srv_count
-9. dst_host_same_srv_rate
-10. dst_host_same_src_port_rate
-
-## 🎓 Model Optimization
-
-### Hyperparameter Tuning with Optuna
-
-```python
-import optuna
-
-def objective(trial):
-    dt_max_depth = trial.suggest_int('dt_max_depth', 2, 32)
-    dt_max_features = trial.suggest_int('dt_max_features', 2, 10)
-    
-    classifier = DecisionTreeClassifier(
-        max_features=dt_max_features,
-        max_depth=dt_max_depth
-    )
-    classifier.fit(x_train, y_train)
-    return classifier.score(x_test, y_test)
-
-study = optuna.create_study(direction='maximize')
-study.optimize(objective, n_trials=30)
-```
-
-## 📊 Visualization
-
-The project includes comprehensive visualizations:
-- Class distribution plots
-- Model performance comparison charts
-- Confusion matrices
-- Precision-Recall curves
-- F1-Score comparison bar charts
 
 ## 🤝 Contributing
 
@@ -236,7 +242,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Authors
 
-- Your Name - [GitHub Profile](https://github.com/yourusername)
+- **Hamza Ghitri** - [GitHub](https://github.com/7amzaGH)
+
+## 📧 Contact
+For questions or feedback:
+- Email: ghitrihamza46@gmail.com
+- GitHub: [@7amzaGH](https://github.com/7amzaGH)
 
 ## 🙏 Acknowledgments
 
@@ -244,9 +255,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Inspired by network security research and machine learning applications in cybersecurity
 - Built with scikit-learn, Optuna, and other open-source libraries
 
-## 📧 Contact
-
-For questions or feedback, please reach out to [your-email@example.com]
 
 ---
 
